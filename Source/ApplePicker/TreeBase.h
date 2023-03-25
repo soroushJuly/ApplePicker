@@ -21,10 +21,25 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 		UStaticMeshComponent* TreeMeshComponent;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		float MovementSpeed;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		float Boundary;
+
+	// Chance for the Actor to move in opposite direction
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
+		float RedirectChance;	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
+		float RedirectTime;
 
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	FTimerHandle ChangeDirectionTimer;
+
+	void ChangeDirection();
 
 };
