@@ -2,10 +2,11 @@
 
 
 #include "TreeBase.h"
+#include "BaseApple.h"
 
 // Sets default values
 ATreeBase::ATreeBase()
-	:MovementSpeed(550.0f), Boundary(800.0f), RedirectChance(0.4f), RedirectTime(1.0f)
+	:MovementSpeed(550.0f), Boundary(800.0f), RedirectChance(0.4f), RedirectTime(1.0f), DropsInterval(1.0f)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -24,6 +25,7 @@ void ATreeBase::BeginPlay()
 	srand(time(0));
 
 	GetWorld()->GetTimerManager().SetTimer(ChangeDirectionTimer, this, &ATreeBase::ChangeDirection, RedirectTime, true, 2.5f);
+	GetWorld()->GetTimerManager().SetTimer(AppleDropsTimer, this, &ATreeBase::DropApple, DropsInterval, true, 2.05f);
 }
 
 // Called every frame
@@ -56,5 +58,27 @@ void ATreeBase::ChangeDirection()
 	{
 		MovementSpeed = -1 * MovementSpeed;
 	}
+}
+
+void ATreeBase::DropApple()
+{
+	// get tree base current location
+	FVector TreeLocation{ GetActorLocation() };
+	FRotator TreeRotation{ GetActorRotation() };
+
+	// add a random number to the location within the range of tree
+	if (FMath::FRand() < 0.5f)
+	{
+		TreeLocation.Y += 150.0f;
+	}
+	else {
+		TreeLocation.Y -= 150.0f;
+
+	}
+	// drop(spawn) apple at the location
+	GetWorld()->SpawnActor<ABaseApple>(SpawnObj, TreeLocation, TreeRotation);
+	/*AppleMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AppleMeshComponent"));
+	TreeMeshComponent = AppleMeshComponent*/
+
 }
 

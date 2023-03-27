@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "TreeBase.generated.h"
 
+//forward declare
+class ABaseApple;
+
 UCLASS()
 class APPLEPICKER_API ATreeBase : public AActor
 {
@@ -28,9 +31,15 @@ protected:
 
 	// Chance for the Actor to move in opposite direction
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
-		float RedirectChance;	
+		float RedirectChance;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
 		float RedirectTime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
+		float DropsInterval;
+
+	// TSubclass is template to create UClass type safety
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Setup")
+		TSubclassOf<ABaseApple> SpawnObj;
 
 
 public:
@@ -39,7 +48,9 @@ public:
 
 private:
 	FTimerHandle ChangeDirectionTimer;
-
 	void ChangeDirection();
+
+	FTimerHandle AppleDropsTimer;
+	void DropApple();
 
 };
