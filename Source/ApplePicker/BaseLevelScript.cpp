@@ -4,8 +4,8 @@
 #include "BaseLevelScript.h"
 #include "Camera/CameraActor.h"
 
-ABaseLevelScript::ABaseLevelScript():
-Camera(nullptr), Controller(nullptr)
+ABaseLevelScript::ABaseLevelScript() :
+	Camera(nullptr), Controller(nullptr)
 {
 }
 
