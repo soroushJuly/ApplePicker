@@ -23,6 +23,8 @@ protected:
 		USceneComponent* Root;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "components")
 		UStaticMeshComponent* Paddle1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
+		float BasketSpeed;
 
 public:	
 	// Called every frame
@@ -31,4 +33,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+private:
+	FVector CurrentVelocity;
+
+	void MoveRight(float AxisValue);
 };
