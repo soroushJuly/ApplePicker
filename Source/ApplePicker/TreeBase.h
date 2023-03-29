@@ -51,6 +51,8 @@ public:
 private:
 	FTimerHandle ChangeDirectionTimer;
 	void ChangeDirection();
+	void ChangeRandomDirection();
+
 
 	FTimerHandle AppleDropsTimer;
 	void DropApple();

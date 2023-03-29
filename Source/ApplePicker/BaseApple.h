@@ -21,6 +21,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "components")
 		UStaticMeshComponent* AppleMeshComponent;
+	UPROPERTY(EditAnywhere, Category = "setup")
+		float LowerBound;
 
 public:
 	// Called every frame

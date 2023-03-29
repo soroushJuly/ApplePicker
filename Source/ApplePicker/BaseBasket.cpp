@@ -18,6 +18,9 @@ ABaseBasket::ABaseBasket()
 
 	RootComponent = Root;
 	Paddle1->SetupAttachment(RootComponent);
+
+	// Programmitically set controller who posses the pawn 
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
 // Called when the game starts or when spawned
