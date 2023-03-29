@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Components/PrimitiveComponent.h"
 #include "BaseBasket.generated.h"
+
 
 UCLASS()
 class APPLEPICKER_API ABaseBasket : public APawn
@@ -26,7 +28,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
 		float BasketSpeed;
 
-public:	
+	UFUNCTION()
+		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalPulse, const FHitResult& Hit);
+
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

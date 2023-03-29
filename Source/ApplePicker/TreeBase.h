@@ -27,7 +27,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Setup")
 		float MovementSpeed;
 	UPROPERTY(EditAnywhere, Category = "Setup")
-		float Boundary;
+		float OuterBoundary;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		float InnerBoundary;
 
 	// Chance for the Actor to move in opposite direction
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")

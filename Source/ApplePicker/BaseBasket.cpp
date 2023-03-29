@@ -2,6 +2,9 @@
 
 
 #include "BaseBasket.h"
+#include "Components/PrimitiveComponent.h"
+// because we want to reference it in this file
+#include "BaseApple.h"
 
 // Sets default values
 ABaseBasket::ABaseBasket()
@@ -22,6 +25,21 @@ void ABaseBasket::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Define what to do on two objects collide
+	// We must enable simulation generate hit events on the basket
+	Paddle1->OnComponentHit.AddDynamic(this, &ABaseBasket::OnHit);
+
+}
+
+void ABaseBasket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalPulse, const FHitResult& Hit)
+{
+	// To check if the other actor is of type ABaseApple
+	ABaseApple* CollidedApple = Cast<ABaseApple>(OtherActor);
+
+	if (CollidedApple)
+	{
+		OtherActor->Destroy();
+	}
 }
 
 // Called every frame
