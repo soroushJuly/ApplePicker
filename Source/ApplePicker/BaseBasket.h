@@ -19,14 +19,23 @@ public:
 
 protected:
 	// Called when the game starts or when spawned
+	// Begin Play is the last VIRTUAL function called in aactor 
 	virtual void BeginPlay() override;
+
+	virtual void PreRegisterAllComponents() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "components")
 		USceneComponent* Root;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "components")
 		UStaticMeshComponent* Paddle1;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "components")
+		UStaticMeshComponent* Paddle2;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "components")
+		UStaticMeshComponent* Paddle3;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
 		float BasketSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
+		FVector PaddlesOffset;
 
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalPulse, const FHitResult& Hit);
