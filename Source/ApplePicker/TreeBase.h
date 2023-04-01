@@ -18,6 +18,8 @@ public:
 	// Sets default values for this actor's properties
 	ATreeBase();
 
+	void StopAppleDrops();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -51,10 +53,10 @@ public:
 private:
 	FTimerHandle ChangeDirectionTimer;
 	void ChangeDirection();
-	void ChangeRandomDirection();
-
 
 	FTimerHandle AppleDropsTimer;
 	void DropApple();
+
+	bool bShouldMove;
 
 };

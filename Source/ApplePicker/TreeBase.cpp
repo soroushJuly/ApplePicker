@@ -6,8 +6,9 @@
 
 // Sets default values
 ATreeBase::ATreeBase()
-	:MovementSpeed(550.0f), OuterBoundary(930.0f), InnerBoundary(570.0f),
-	RedirectChance(0.2f), RedirectTime(1.0f), DropsInterval(1.0f)
+	:MovementSpeed(550.0f), OuterBoundary(930.0f)
+	, InnerBoundary(570.0f), bShouldMove(true)
+	, RedirectChance(0.2f), RedirectTime(1.0f), DropsInterval(1.0f)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -34,14 +35,18 @@ void ATreeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Check if tree is permited to move then continue
+	if (!bShouldMove)
+	{
+		return;
+	}
+
 	FVector TempLocation{ GetActorLocation() };
 
-	//if (isReachedBoundaries())
 	if (FMath::Abs(TempLocation.Y) > OuterBoundary)
 	{
 		MovementSpeed = -1 * MovementSpeed;
 	}
-
 
 	// add offset
 	TempLocation.Y += MovementSpeed * DeltaTime;
@@ -84,6 +89,14 @@ void ATreeBase::DropApple()
 	GetWorld()->SpawnActor<ABaseApple>(SpawnObj, TreeLocation, TreeRotation);
 	/*AppleMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AppleMeshComponent"));
 	TreeMeshComponent = AppleMeshComponent*/
-
 }
 
+void ATreeBase::StopAppleDrops()
+{
+	// Unset the timers
+	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+
+	// Make the tree to stop
+	bShouldMove = false;
+
+}

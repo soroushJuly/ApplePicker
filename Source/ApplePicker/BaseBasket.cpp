@@ -1,14 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "ApplePickerGameModeBase.h"
 #include "BaseBasket.h"
 #include "Components/PrimitiveComponent.h"
 // because we want to reference it in this file
+#include "Kismet/GameplayStatics.h"
 #include "BaseApple.h"
 
 // Sets default values
 ABaseBasket::ABaseBasket()
-	:BasketSpeed(700.0f), PaddlesOffset(FVector(0.0f, 0.0f, 120.0f)), CurrentVelocity(0.0)
+	:BasketSpeed(700.0f), PaddlesOffset(FVector(0.0f, 0.0f, 120.0f)), CurrentVelocity(0.0), GameMode(nullptr)
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -23,8 +24,26 @@ ABaseBasket::ABaseBasket()
 	Paddle2->SetupAttachment(Paddle1);
 	Paddle3->SetupAttachment(Paddle2);
 
+	PaddleList.Push(Paddle1);
+	PaddleList.Push(Paddle2);
+	PaddleList.Push(Paddle3);
+
 	// Programmitically set controller who posses the pawn 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+}
+
+void ABaseBasket::DestroyPaddle()
+{
+	if (!PaddleList.IsEmpty())
+	{
+		// Pop function returns a pointer so we can use it to destroy that paddle
+		UStaticMeshComponent* LastPaddle = PaddleList.Pop();
+
+		if (LastPaddle)
+		{
+			LastPaddle->DestroyComponent();
+		}
+	}
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +61,9 @@ void ABaseBasket::BeginPlay()
 	Paddle1->OnComponentHit.AddDynamic(this, &ABaseBasket::OnHit);
 	Paddle2->OnComponentHit.AddDynamic(this, &ABaseBasket::OnHit);
 	Paddle3->OnComponentHit.AddDynamic(this, &ABaseBasket::OnHit);
+
+	// Getting game mode
+	GameMode = Cast<AApplePickerGameModeBase>(UGameplayStatics::GetGameMode(this));
 
 }
 
@@ -61,6 +83,10 @@ void ABaseBasket::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 
 	if (CollidedApple)
 	{
+		if (GameMode)
+		{
+			GameMode->HandleAppleCaught();
+		}
 		OtherActor->Destroy();
 	}
 }
@@ -91,6 +117,6 @@ void ABaseBasket::MoveRight(float AxisValue)
 	// CurrentVelocity.Y = AxisValue * BasketSpeed;
 	// Using Clamp function to stop double calculating A and Left/ D and Right
 	CurrentVelocity.Y = FMath::Clamp(AxisValue, -1.0f, 1.0f) * BasketSpeed;
-	UE_LOG(LogTemp, Warning, TEXT("Velocity: %s"), *CurrentVelocity.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("Velocity: %s"), *CurrentVelocity.ToString());
 }
 

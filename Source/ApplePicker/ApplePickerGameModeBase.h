@@ -7,13 +7,24 @@
 #include "ApplePickerGameModeBase.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class APPLEPICKER_API AApplePickerGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-		// initial commit
-	
+public:
+	void HandleAppleCaught();
+	void HandleAppleLost();
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+private:
+	int32 ApplesCaught{ 0 };
+	int32 ApplesLost{ 0 };
+
+	// it is better to null the pointers instead of garbage value
+	class ABaseBasket* Basket{ nullptr };
 };
