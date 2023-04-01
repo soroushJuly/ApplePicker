@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+#include "BaseAppleTreeParent.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -10,7 +11,7 @@
 class ABaseApple;
 
 UCLASS()
-class APPLEPICKER_API ATreeBase : public AActor
+class APPLEPICKER_API ATreeBase : public ABaseAppleTreeParent
 {
 	GENERATED_BODY()
 

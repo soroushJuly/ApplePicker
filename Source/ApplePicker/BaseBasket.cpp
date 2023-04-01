@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ApplePickerGameModeBase.h"
 #include "BaseBasket.h"
+#include "ApplePickerGameModeBase.h"
 #include "Components/PrimitiveComponent.h"
 // because we want to reference it in this file
 #include "Kismet/GameplayStatics.h"
@@ -9,7 +9,9 @@
 
 // Sets default values
 ABaseBasket::ABaseBasket()
-	:BasketSpeed(700.0f), PaddlesOffset(FVector(0.0f, 0.0f, 120.0f)), CurrentVelocity(0.0), GameMode(nullptr)
+	:BasketSpeed(700.0f), PaddlesOffset(FVector(0.0f, 0.0f, 120.0f))
+	, CurrentVelocity(0.0), GameMode(nullptr)
+	, Controller(nullptr)
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -46,6 +48,11 @@ void ABaseBasket::DestroyPaddle()
 	}
 }
 
+APlayerController* ABaseBasket::GetBasketPlayerController() const
+{
+	return Controller;
+}
+
 // Called when the game starts or when spawned
 void ABaseBasket::BeginPlay()
 {
@@ -64,6 +71,8 @@ void ABaseBasket::BeginPlay()
 
 	// Getting game mode
 	GameMode = Cast<AApplePickerGameModeBase>(UGameplayStatics::GetGameMode(this));
+
+	Controller = Cast<APlayerController>(GetController());
 
 }
 
@@ -96,10 +105,13 @@ void ABaseBasket::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!CurrentVelocity.IsZero())
+	if (InputEnabled())
 	{
-		FVector NewLocation = GetActorLocation() + CurrentVelocity * DeltaTime;
-		SetActorLocation(NewLocation);
+		if (!CurrentVelocity.IsZero())
+		{
+			FVector NewLocation = GetActorLocation() + CurrentVelocity * DeltaTime;
+			SetActorLocation(NewLocation);
+		}
 	}
 }
 

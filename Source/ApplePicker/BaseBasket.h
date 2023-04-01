@@ -21,6 +21,8 @@ public:
 	// This will be called from other actors soo it should be in public section
 	void DestroyPaddle();
 
+	APlayerController* GetBasketPlayerController() const;
+
 protected:
 	// Called when the game starts or when spawned
 	// Begin Play is the last VIRTUAL function called in aactor 
@@ -59,4 +61,6 @@ private:
 	TArray<UStaticMeshComponent*> PaddleList;
 
 	class AApplePickerGameModeBase* GameMode;
+
+	APlayerController* Controller;
 };

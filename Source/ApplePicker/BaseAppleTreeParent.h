@@ -1,35 +1,26 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-#include "BaseAppleTreeParent.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "BaseApple.generated.h"
+#include "BaseAppleTreeParent.generated.h"
 
 UCLASS()
-class APPLEPICKER_API ABaseApple : public ABaseAppleTreeParent
+class APPLEPICKER_API ABaseAppleTreeParent : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
-	ABaseApple();
+	ABaseAppleTreeParent();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category = "components")
-		UStaticMeshComponent* AppleMeshComponent;
-	UPROPERTY(EditAnywhere, Category = "setup")
-		float LowerBound;
-
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-private:
-	class AApplePickerGameModeBase* CurrentGameMode;
 
 };

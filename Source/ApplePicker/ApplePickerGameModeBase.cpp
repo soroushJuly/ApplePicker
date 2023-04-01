@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "BaseBasket.h"
 #include "BaseApple.h"
+#include "BaseAppleTreeParent.h"
 #include "TreeBase.h"
 
 void AApplePickerGameModeBase::BeginPlay()
@@ -33,31 +34,37 @@ void AApplePickerGameModeBase::HandleAppleLost()
 	if (ApplesLost >= 3)
 	{
 
-		// stop spawing apples
-		TArray<AActor*> TreesFounded;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATreeBase::StaticClass(), TreesFounded);
-		for (auto ptr : TreesFounded)
+		// static class return an object representing that class at the runtime
+		TArray<AActor*> AppleTreesParentFounded;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld()
+			, ABaseAppleTreeParent::StaticClass()
+			, AppleTreesParentFounded);
+
+		for (auto ptr : AppleTreesParentFounded)
 		{
-			ATreeBase* Tree = Cast<ATreeBase>(ptr);
-			if (Tree)
+			//ATreeBase* Tree = Cast<ATreeBase>(ptr);
+			// stop spawing apples
+			if (ATreeBase* Tree = Cast<ATreeBase>(ptr))
 			{
 				Tree->StopAppleDrops();
 			}
-		}
-
-		// destroy remaining apples
-		// static class return an object representing that class at the runtime
-		TArray<AActor*> ApplesFounded;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseApple::StaticClass(), ApplesFounded);
-
-		for (auto ptr : ApplesFounded)
-		{
-			ABaseApple* Apple = Cast<ABaseApple>(ptr);
-			if (Apple)
+			else if (ABaseApple* Apple = Cast<ABaseApple>(ptr))
 			{
+				// destroy remaining apples
 				Apple->Destroy();
 			}
 		}
+
+		if (Basket && Basket->GetBasketPlayerController())
+		{
+			// Disabling accepting input for the basket after loss
+			// if nullptr passed disable input from all controller 
+			Basket->DisableInput(Basket->GetBasketPlayerController());
+
+			// in case if a player holds a key in the last frame of the lossing
+			Basket->SetActorTickEnabled(false);
+		}
+
 	}
 
 }
