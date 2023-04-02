@@ -21,6 +21,18 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintNativeEvent)
+		void HandleGameOver(bool bWonGame);
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		int32 ApplesToWin {
+		4
+	};
+
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		int32 ApplesToLose {
+		3
+	};
 private:
 	int32 ApplesCaught{ 0 };
 	int32 ApplesLost{ 0 };
