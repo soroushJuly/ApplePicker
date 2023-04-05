@@ -20,8 +20,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void Destroyed() override;
+
 	UPROPERTY(EditAnywhere, Category = "components")
 		UStaticMeshComponent* AppleMeshComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Particle Effects")
+		class UNiagaraSystem* AppleDestroyedParticles;
+
+
+
 	UPROPERTY(EditAnywhere, Category = "setup")
 		float LowerBound;
 

@@ -20,6 +20,8 @@ public:
 	ATreeBase();
 
 	void StopAppleDrops();
+	void StartAppleDrops();
+	void StartRedirecting();
 
 protected:
 	// Called when the game starts or when spawned

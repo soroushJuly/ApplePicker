@@ -7,7 +7,7 @@
 // Sets default values
 ATreeBase::ATreeBase()
 	:MovementSpeed(550.0f), OuterBoundary(930.0f)
-	, InnerBoundary(570.0f), bShouldMove(true)
+	, InnerBoundary(570.0f), bShouldMove(false)
 	, RedirectChance(0.2f), RedirectTime(1.0f), DropsInterval(1.0f)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -25,9 +25,6 @@ void ATreeBase::BeginPlay()
 	Super::BeginPlay();
 
 	srand(time(0));
-
-	GetWorld()->GetTimerManager().SetTimer(ChangeDirectionTimer, this, &ATreeBase::ChangeDirection, RedirectTime, true, 2.5f);
-	GetWorld()->GetTimerManager().SetTimer(AppleDropsTimer, this, &ATreeBase::DropApple, DropsInterval, true, 2.05f);
 }
 
 // Called every frame
@@ -60,12 +57,15 @@ void ATreeBase::Tick(float DeltaTime)
 
 void ATreeBase::ChangeDirection()
 {
-	FVector TempPosition = GetActorLocation();
-	if ((TempPosition.Y <= InnerBoundary) && (TempPosition.Y >= -InnerBoundary))
+	if (bShouldMove)
 	{
-		if (FMath::FRand() <= RedirectChance)
+		FVector TempPosition = GetActorLocation();
+		if ((TempPosition.Y <= InnerBoundary) && (TempPosition.Y >= -InnerBoundary))
 		{
-			MovementSpeed = -1 * MovementSpeed;
+			if (FMath::FRand() <= RedirectChance)
+			{
+				MovementSpeed = -1 * MovementSpeed;
+			}
 		}
 	}
 }
@@ -99,4 +99,19 @@ void ATreeBase::StopAppleDrops()
 	// Make the tree to stop
 	bShouldMove = false;
 
+}
+
+void ATreeBase::StartAppleDrops()
+{
+	GetWorld()->GetTimerManager().SetTimer(AppleDropsTimer
+		, this, &ATreeBase::DropApple
+		, DropsInterval, true, 1.2f);
+}
+
+void ATreeBase::StartRedirecting()
+{
+	bShouldMove = true;
+	GetWorld()->GetTimerManager().SetTimer(ChangeDirectionTimer, this
+		, &ATreeBase::ChangeDirection, RedirectTime
+		, true);
 }
